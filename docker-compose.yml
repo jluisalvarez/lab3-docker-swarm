@@ -5,6 +5,7 @@ services:
     depends_on:
       - mongo
     deploy:
+      mode: replicated
       replicas: 5
       restart_policy:
         condition: on-failure

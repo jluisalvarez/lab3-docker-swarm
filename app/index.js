@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 var urlmongo = 'mongodb://mongo/linkdb';
 mongoose.connect(urlmongo, { useNewUrlParser: true }, function(err, dbmongo) {
      if (err) { 
-        console.log("Error: " + err);//throw err;
+        console.log("Error: " + err);
      } else {
         console.log("Conectado...");
      }
