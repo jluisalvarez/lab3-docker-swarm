@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Aplicación Enlaces de Interés</title>
+        <meta charset="UTF8" />
+    </head>
+   <body>
+       <h1>Enlaces de Interés</h1>
+
+      <ul class="quotes">
+        <% for(var i=0; i<links.length; i++) {%>
+            <li class="quote">
+                <a href='<%= links[i].url %>' ><%= links[i].description %></a> -
+                [<a href='/api/delete/<%=links[i]._id%>'>Delete</a>]
+            </li>
+        <% } %>
+      </ul>
+      
+       
+      <hr />
+      
+      <h3>Puedes crear nuevos enlaces desde este formulario</h3>
+      <form action = "/api/create" method = "POST">
+         URL del Link: <input type = "url" name = "url" size = "40">  <br>
+         _Description_: <input type = "text" name = "description">
+         <input type = "submit" value = "Submit">
+      </form>
+      
+   </body>
+</html>
