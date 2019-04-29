@@ -56,19 +56,35 @@ Una vez clonado, dispondrás del fichero Dockerfile para crear la imagen con el 
 
 
 ```js
-$ docker build -t node-webapp .
+$ docker build -t <username>/<dockerimage> .
 ```
+
+Donde <username> debe ser sustituido por tu usuario en Docker Hub y <dockerimage> por el nombre
+que se dará a la imagen. Por ejemplo, jluisalvarez/node-webapp
+
+Sube la imagen al Docker Hub. Para ello, identificate y luego sube la imagen.
+
+```js
+$ docker login
+```
+
+```js
+$ docker push <username>/<dockerimage>
+```
+
+
 
 ## Docker Compose
 
 El fichero doker-compose.yml tiene definidos 3 servicios, una red para conectarlos y un volumen para persistir los datos
 de MongoDB.
+Cambia la imagen del servicio web (jluisalvarez/node-webapp) por la creada en el paso anterior.
 
 ```js
 version: "3.7"
 services:
   web:
-    imagen: node-webapp
+    imagen: jluisalvarez/node-webapp
     depends_on:
       - mongo
     deploy:
@@ -126,6 +142,10 @@ $ docker stack deploy -c docker-compose.yml webapp
 
 ```js
 $ docker service ls
+```
+
+```js
+docker stack ps webapp
 ```
 
 ## Eliminar servicios
