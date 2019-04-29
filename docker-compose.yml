@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   web:
-    image: webapp
+    image: node-webapp
     depends_on:
       - mongo
     deploy:
