@@ -138,14 +138,14 @@ Podrás desplegar los servicios ejecutando el siguiente comando:
 $ docker stack deploy -c docker-compose.yml webapp
 ```
 
-## Mostrar listado de servicios
+## Mostrar listado de servicios y contenedores
 
 ```js
 $ docker service ls
 ```
 
 ```js
-docker stack ps webapp
+$ docker stack ps webapp
 ```
 
 ## Eliminar servicios
