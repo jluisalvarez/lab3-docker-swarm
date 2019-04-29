@@ -5,18 +5,14 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
-var db; // no necesaria
-
 var mongoose = require('mongoose');
 var urlmongo = 'mongodb://mongo/linkdb';
 mongoose.connect(urlmongo, { useNewUrlParser: true }, function(err, dbmongo) {
      if (err) { 
         console.log("Error: " + err);//throw err;
      } else {
-        db = dbmongo;
         console.log("Conectado...");
      }
-     //db.close();
 });
 
 var linkSchema = mongoose.Schema({
@@ -29,15 +25,10 @@ var Link = mongoose.model('Link', linkSchema);
 app.set('view engine', 'ejs');
 
 
-//app.use(express.static('static'));
-//app.get('/', function (req, res) {
-//   res.sendFile( __dirname + "/" + "index.html" );
-//});
 app.get('/', function (req, res) {
     
      Link.find(function (err, links){
         if (err) return console.log(err);
-        // renders index.ejs
         res.render('index.ejs', {'links': links});
     });
     

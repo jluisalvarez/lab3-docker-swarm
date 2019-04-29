@@ -4,7 +4,7 @@ FROM node:10
 WORKDIR /usr/src/app
 
 # Copiar contenido de la Aplicación
-COPY app/* .
+COPY app/ ./
 
 # Instalar dependencias
 RUN npm install
