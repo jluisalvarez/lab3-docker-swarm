@@ -41,7 +41,7 @@ Ver el estado del Swarm:
 $ docker node ls
 ```
 
-## Construye la imagen de la aplicación a partir del Dockerfile
+## Construir la imagen de la aplicación a partir del Dockerfile
 
 La aplicación y el resto de ficheros para esta guía están disponible en un repositorio Github.
 
