@@ -27,6 +27,7 @@ To add a manager to this swarm, run 'docker swarm join-token manager' and follow
 ```
 
 Unimos al Swarm los otros dos nodos
+
 ```js
 $ docker swarm join --token SWMTKN-2-2755s1w5d5ssynkmlz1qvrorw6lox4p5f0ibjgp4mh1p038t6d-ax1xe0bdhal9pg8a8zbkvf736 10.132.0.10:2377
 
@@ -36,21 +37,38 @@ This node joined a swarm as a worker.
 
 Ver el estado del Swarm:
 
+```js
+$ docker node ls
+```
+
 ## Construye la imagen de la aplicación a partir del Dockerfile
 
+La aplicación y el resto de ficheros para esta guía están disponible en un repositorio Github.
+
+Para clonarlo ejecuta el siguiente comando en la máquina master:
+
+
 ```js
-docker build -t jluisalvarez/node-webapp .
+$ git clone https://github.com/jlalvarez/webapp.git
+```
+
+Una vez clonado, dispondrás del fichero Dockerfile para crear la imagen con el comando: 
+
+
+```js
+$ docker build -t node-webapp .
 ```
 
 ## Docker Compose
 
 El fichero doker-compose.yml tiene definidos 3 servicios, una red para conectarlos y un volumen para persistir los datos
+de MongoDB.
 
 ```js
 version: "3.7"
 services:
   web:
-    imagen: jluisalvarez/node-webapp
+    imagen: node-webapp
     depends_on:
       - mongo
     deploy:
@@ -98,18 +116,20 @@ networks:
 
 ## Desplegar servicios:
 
+Podrás desplegar los servicios ejecutando el siguiente comando:
+
 ```js
-docker stack deploy -c docker-compose.yml webapp
+$ docker stack deploy -c docker-compose.yml webapp
 ```
 
 ## Mostrar listado de servicios
 
 ```js
-docker service ls
+$ docker service ls
 ```
 
 ## Eliminar servicios
 
 ```js
-docker stack rm webapp
+$ docker stack rm webapp
 ```

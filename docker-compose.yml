@@ -1,12 +1,12 @@
 version: "3.7"
 services:
   web:
-    imagen: jluisalvarez/node-webapp
+    imagen: webapp
     build: .
     depends_on:
       - mongo
     deploy:
-      replicas: 2
+      replicas: 5
       restart_policy:
         condition: on-failure
       resources:
