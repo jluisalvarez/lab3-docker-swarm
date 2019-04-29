@@ -56,13 +56,18 @@ networks:
 
 ## Desplegar servicios:
 
+```js
 docker stack deploy -c docker-compose.yml webapp
+```
 
 ## Mostrar listado de servicios
 
+```js
 docker service ls
+```
 
 ## Eliminar servicios
 
+```js
 docker stack rm webapp
-
+```
