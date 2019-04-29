@@ -1,7 +1,8 @@
 version: "3.7"
 services:
   web:
-    image: jluisalvarez/node-webapp
+    imagen: jluisalvarez/node-webapp
+    build: .
     depends_on:
       - mongo
     deploy:
