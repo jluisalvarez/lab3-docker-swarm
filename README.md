@@ -1,8 +1,7 @@
 # Desplegar App Contenerizada en un Clúster Swarm
 
 En esta guía vamos a desplegar una Aplicación desarrollada con Nodejs que utiliza una base de datos
-NoSQL MongoDB en un clúster Swarm. Para monitorizar los ccontenedores usaremos la aplicación visualizer
-en un contenedor.
+NoSQL MongoDB en un clúster Swarm. Para monitorizar los contenedores usaremos la aplicación visualizer.
 
 
 ## Crear el clúster
@@ -52,7 +51,7 @@ Para clonarlo ejecuta el siguiente comando en la máquina master:
 $ git clone https://github.com/jlalvarez/webapp.git
 ```
 
-## Aplicación Node
+### Aplicación Nodejs
 
 Para esta guía se ha creado una aplicación Node que permite guardar enlaces de interés, utilizando express como framework web y una base de datos MongoDB para almacenarlos.
 
@@ -223,7 +222,7 @@ Y, en la carpeta views, contamos con la vista views/index.ejs
 </html>
 ```
 
-## Dockerfile
+### Dockerfile
 
 Además, se incluye el fichero Dockerfile para crear la imagen
 
