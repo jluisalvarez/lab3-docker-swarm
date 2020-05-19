@@ -13,7 +13,7 @@ Instalamos docker en cada una de ellas.
 Instalamos docker-compose en el máster
 
 Iniciamos el Swarm en la máquina máster
-```js
+```
 $ docker swarm init
 
 Swarm initialized: current node (sqab0b4s7an7rbnxfujwqzsjq) is now a manager.
@@ -28,7 +28,7 @@ To add a manager to this swarm, run 'docker swarm join-token manager' and follow
 
 Unimos al Swarm los otros dos nodos
 
-```js
+```
 $ docker swarm join --token SWMTKN-2-2755s1w5d5ssynkmlz1qvrorw6lox4p5f0ibjgp4mh1p038t6d-ax1xe0bdhal9pg8a8zbkvf736 10.132.0.10:2377
 
 This node joined a swarm as a worker.
@@ -37,7 +37,7 @@ This node joined a swarm as a worker.
 
 Ver el estado del Swarm:
 
-```js
+```
 $ docker node ls
 ```
 
@@ -48,14 +48,208 @@ La aplicación y el resto de ficheros para esta guía están disponible en un re
 Para clonarlo ejecuta el siguiente comando en la máquina master:
 
 
-```js
+```
 $ git clone https://github.com/jlalvarez/webapp.git
 ```
 
-Una vez clonado, dispondrás del fichero Dockerfile para crear la imagen con el comando: 
+## Aplicación Node
 
+Para esta guía se ha creado una aplicación Node que permite guardar enlaces de interés, utilizando express como framework web y una base de datos MongoDB para almacenarlos.
+
+El fichero principal index.js contiene:
 
 ```js
+var express = require('express');
+var app = express();
+
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
+
+var mongoose = require('mongoose');
+var urlmongo = 'mongodb://mongo/linkdb';
+mongoose.connect(urlmongo, { useNewUrlParser: true }, function(err, dbmongo) {
+     if (err) { 
+        console.log("Error: " + err);
+     } else {
+        console.log("Conectado...");
+     }
+});
+
+var linkSchema = mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
+    url: String,
+    description: String
+});
+var Link = mongoose.model('Link', linkSchema);
+
+app.set('view engine', 'ejs');
+
+
+app.get('/', function (req, res) {
+    
+     Link.find(function (err, links){
+        if (err) return console.log(err);
+        res.render('index.ejs', {'links': links});
+    });
+    
+
+});
+
+var router = express.Router();
+app.use('/api', router);
+
+router.get('/test', function (req, res) {
+   res.send('Hello World');
+});
+
+var link_list = function (req, res) {
+    Link.find(function (err, links){
+        if(err) return res.send({message: 'Error en el servidor'});
+        
+        if(links){
+            res.json({'links': links});
+        }else{
+            return res.status(404).send({
+                message: 'No hay links'
+            });
+        }
+    });
+};
+router.get('/list',link_list);
+
+var link_create = function (req, res) {
+    var l = new Link(
+        {
+           _id: new mongoose.Types.ObjectId(),
+            url: req.body.url,
+            description: req.body.description
+        }
+    );
+
+    l.save(function (err) {
+        if (err) {
+            res.send('<p>ERROR: Link Not Created</p><a href="">Volver</a>');
+        } else {
+            res.send('Link Created successfully - <a href="/">Volver</a>'); 
+            console.log('Link: ' + l.url + ' Created successfully');
+        }
+    });
+};
+router.post('/create', urlencodedParser, link_create);
+
+
+var link_delete = function (req, res) {
+    Link.findByIdAndRemove(req.params.id, function (err) {
+        if (err) res.send('<p>ERROR: Link Not Deleted</p><a href="">Volver</a>');
+        else {
+            res.send('Deleted successfully! - <a href="/">Volver</a>');
+            console.log('Link: ' + req.params.id + ' deleted successfully');
+        }
+    });
+};
+router.get('/delete/:id', link_delete);
+
+var server = app.listen(8080, function () {
+   var host = server.address().address;
+   var port = server.address().port;
+
+   console.log("Example app listening at http://%s:%s", host, port);
+});
+```
+
+Los requisitos están indicados en el fichero package.json:
+
+```
+{
+  "name": "node-webapp",
+  "version": "1.0.0",
+  "description": "Web App con Node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jlalvarez/node-webapp.git"
+  },
+  "author": "J.L. Álvarez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jlalvarez/node-webapp/issues"
+  },
+  "homepage": "https://github.com/jlalvarez/node-webapp#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "mongoose": "^5.5.3"
+  }
+}
+```
+
+Y, en la carpeta views, contamos con la vista views/index.ejs
+
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Aplicación Enlaces de Interés</title>
+        <meta charset="UTF8" />
+    </head>
+   <body>
+       <h1>Enlaces de Interés</h1>
+
+      <ul class="quotes">
+        <% for(var i=0; i<links.length; i++) {%>
+            <li class="quote">
+                <a href='<%= links[i].url %>' ><%= links[i].description %></a> -
+                [<a href='/api/delete/<%=links[i]._id%>'>Delete</a>]
+            </li>
+        <% } %>
+      </ul>
+      
+       
+      <hr />
+      
+      <h3>Puedes crear nuevos enlaces desde este formulario</h3>
+      <form action = "/api/create" method = "POST">
+         URL del Link: <input type = "url" name = "url" size = "40">  <br>
+         _Description_: <input type = "text" name = "description">
+         <input type = "submit" value = "Submit">
+      </form>
+      
+   </body>
+</html>
+```
+
+## Dockerfile
+
+Además, se incluye el fichero Dockerfile para crear la imagen
+
+```
+FROM node:10
+
+# Establecer Directorio de trabajo
+WORKDIR /usr/src/app
+
+# Copiar contenido de la Aplicación
+COPY app/ ./
+
+# Instalar dependencias
+RUN npm install
+
+# Exponer puerto 8080
+EXPOSE 8080
+
+# Ejecutar Aplicación
+CMD ["node", "index.js"]
+```
+
+Para ello, utiliza el comando: 
+
+
+```
 $ docker build -t <username>/<dockerimage> .
 ```
 
