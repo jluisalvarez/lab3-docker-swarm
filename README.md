@@ -55,7 +55,7 @@ Para clonarlo ejecuta el siguiente comando en la máquina master:
 
 
 ```
-$ git clone https://github.com/jlalvarez/webapp.git
+$ git clone https://github.com/jluisalvarez/lab3-docker-swarm
 ```
 
 ### Aplicación Nodejs
