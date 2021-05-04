@@ -1,5 +1,7 @@
 # Desplegar App Contenerizada en un Clúster Swarm
 
+(https://docs.docker.com/engine/swarm/) y (https://docs.docker.com/engine/reference/commandline/stack/)
+
 En esta guía vamos a desplegar una Aplicación desarrollada con Nodejs que utiliza una base de datos
 NoSQL MongoDB en un clúster Swarm. Para monitorizar los contenedores usaremos la aplicación visualizer.
 
@@ -7,6 +9,11 @@ NoSQL MongoDB en un clúster Swarm. Para monitorizar los contenedores usaremos l
 ## Crear el clúster
 
 Crear 3 máquinas virtuales, una de ellas la denominaremos: master y las otras dos: nodo1 y nodo2.
+
+Puedes utilizar docker-machine (https://docs.docker.com/machine/) 
+- Instalación: https://docs.docker.com/machine/install-machine/ 
+- Crear máquinas: https://docs.docker.com/machine/get-started/ 
+
 
 Instalamos docker en cada una de ellas.
 Instalamos docker-compose en el máster
