@@ -177,14 +177,14 @@ Los requisitos están indicados en el fichero package.json:
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jlalvarez/node-webapp.git"
+    "url": "git+https://github.com/jluisalvarez/lab3-docker-swarm"
   },
   "author": "J.L. Álvarez",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jlalvarez/node-webapp/issues"
+    "url": "https://github.com/jluisalvarez/lab3-docker-swarm/issues"
   },
-  "homepage": "https://github.com/jlalvarez/node-webapp#readme",
+  "homepage": "https://github.com/jluisalvarez/lab3-docker-swarm#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
     "ejs": "^2.6.1",
